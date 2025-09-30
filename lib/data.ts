@@ -27,7 +27,8 @@ export async function fetchTopic(id: string) {
     return data.rows && data.rows.length > 0 ? data.rows[0] : null;
   } catch (error) {
     console.error("Database Error:", error);
-    throw new Error("Failed to fetch topics.");
+    console.error("Topic ID:", id);
+    throw new Error("Failed to fetch topic.");
   }
 }
 
