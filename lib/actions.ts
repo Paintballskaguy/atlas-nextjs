@@ -1,8 +1,8 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { insertTopic } from "./data";
 import { redirect } from "next/navigation";
+import { insertTopic, insertQuestion, incrementVotes } from "./data";
 
 export async function addTopic(data: FormData) {
   let topic;

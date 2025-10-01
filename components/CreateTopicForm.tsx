@@ -14,9 +14,10 @@ export default function CreateTopicForm() {
               <input
                 id="title"
                 name="title"
-                type="string"
+                type="text"
                 placeholder="Enter topic title"
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-2 text-sm outline-2 placeholder:text-gray-500"
+                required
               />
             </div>
           </div>
@@ -29,7 +30,12 @@ export default function CreateTopicForm() {
         >
           Cancel
         </Link>
-        <button type="submit">Create Topic</button>
+        <button
+          type="submit"
+          className="flex h-10 items-center rounded-lg bg-secondary px-4 text-sm font-medium text-white transition-colors hover:bg-primary focus:bg-secondary"
+        >
+          Create Topic
+        </button>
       </div>
     </form>
   );
