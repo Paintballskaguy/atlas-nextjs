@@ -4,6 +4,7 @@ import Link from "next/link";
 type QuestionProps = {
   id: string;
   text: string;
+  answer_id?: string;
   votes: number;
 };
 
