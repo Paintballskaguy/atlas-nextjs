@@ -1,5 +1,5 @@
 import { sql } from "@vercel/postgres";
-import { Question, Topic, User } from "./definitions";
+import { Question, Topic, User, Answer } from "./definitions";
 
 export async function fetchUser(email: string): Promise<User | undefined> {
   try {
@@ -43,6 +43,28 @@ export async function fetchQuestions(id: string) {
   }
 }
 
+export async function fetchQuestion(id: string) {
+  try {
+    const data = await sql<Question>`SELECT * FROM questions WHERE id = ${id}`;
+    return data.rows && data.rows.length > 0 ? data.rows[0] : null;
+  } catch (error) {
+    console.error("Database Error:", error);
+    console.error("Question ID:", id);
+    throw new Error("Failed to fetch question.");
+  }
+}
+
+export async function fetchAnswers(questionId: string) {
+  try {
+    const data =
+      await sql<Answer>`SELECT * FROM answers WHERE question_id = ${questionId}`;
+    return data.rows;
+  } catch (error) {
+    console.error("Database Error:", error);
+    throw new Error("Failed to fetch answers.");
+  }
+}
+
 export async function insertQuestion(
   question: Pick<Question, "title" | "topic_id" | "votes">
 ) {
@@ -68,6 +90,17 @@ export async function insertTopic(topic: Pick<Topic, "title">) {
   }
 }
 
+export async function insertAnswer(answer: Pick<Answer, "answer" | "question_id">) {
+  try {
+    const data =
+      await sql<Answer>`INSERT INTO answers (answer, question_id) VALUES (${answer.answer}, ${answer.question_id}) RETURNING id;`;
+    return data.rows[0];
+  } catch (error) {
+    console.error("Database Error:", error);
+    throw new Error("Failed to add answer.");
+  }
+}
+
 export async function incrementVotes(id: string) {
   try {
     const data =
@@ -76,5 +109,16 @@ export async function incrementVotes(id: string) {
   } catch (error) {
     console.error("Database Error:", error);
     throw new Error("Failed to increment votes.");
+  }
+}
+
+export async function updateAcceptedAnswer(questionId: string, answerId: string) {
+  try {
+    const data =
+      await sql<Question>`UPDATE questions SET answer_id = ${answerId} WHERE id = ${questionId}`;
+    return data.rows;
+  } catch (error) {
+    console.error("Database Error:", error);
+    throw new Error("Failed to update accepted answer.");
   }
 }
